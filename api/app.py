@@ -1,33 +1,46 @@
 from flask import Flask, jsonify, request, abort, make_response
-from user import User
+from models.user import User
 
 app = Flask(__name__)
 
 
 users = []
 
+# dummy endpoint for sample output
 @app.route('/notes/api/v1.0/',methods=['GET'])
 def index():
     return jsonify(exercise = "Bench Press",
                    weight = 225,
                    date = "Dec-23-1999")
 
+# allows user to create accounts
 @app.route('/notes/api/v1.0/sign-up', methods=['POST'])
 def signup():
 
-    member = User(request.json['username'],
-                   request.json['email'],
-                   request.json['password'],
-                   len(users))
-    if member.pw != request.json['password']:
-        abort(400)
+    name = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
+    confirm = request.json['confirm-pw']
+    if len(users) == 0:
+        id = 0
+    else:
+         id = users[-1].id + 1
+
+    member = User(name,email,password,id)
+
+    if not name or not email or not password or not confirm:
+        abort(400) # missing args
+
+    if password != confirm:
+        abort(400) # password does not match confirm
+
     for ppl in users:
         if member == ppl:
-            abort(404)
+            abort(404) # account credentials not available
     users.append(member)
+    return member.info()
 
-    return member.json()
-
+# authenticates users and logs them in
 @app.route('/notes/api/v1.0/login', methods = ['GET'])
 def login():
     pass
