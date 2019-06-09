@@ -1,10 +1,21 @@
 from flask import Flask, jsonify, request, abort, make_response
 from models.user import User
+import mysql.connector
+
 
 app = Flask(__name__)
 
 
 users = []
+
+mydb = mysql.connector.connect(host="gym-notes.cj6ntdmjz9qf.us-east-1.rds.amazonaws.com",
+                               user="gym_log_db_1234" ,
+                               passwd="V7qEz8kaqSs4zBN",
+                               database="gym_log_db_1234")
+
+cursor = mydb.cursor()
+
+cursor.execute("SHOW databases")
 
 # dummy endpoint for sample output
 @app.route('/notes/api/v1.0/',methods=['GET'])
@@ -38,6 +49,7 @@ def signup():
         if member == ppl:
             abort(404) # account credentials not available
     users.append(member)
+
     return member.info()
 
 # authenticates users and logs them in

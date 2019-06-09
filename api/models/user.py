@@ -7,7 +7,7 @@ class User:
         self.username = username
         self.email = email
         self.hashed_pw = pwd.encrypt(pw)
-        self.id = id
+        self.user_id = id
 
     def __eq__(self, other):
         if self.username == other.username or self.email == other.email:
@@ -21,11 +21,13 @@ class User:
         self.hashed_pw = hash
 
     def json(self):
+        print(self.hashed_pw)
         return jsonify(username = self.username,
                        email = self.email,
                        pw_hash = self.hashed_pw,
-                       id = self.id)
+                       id = self.user_id)
+
     def info(self):
                 return jsonify(username = self.username,
                                email = self.email,
-                               id = self.id)
+                               id = self.user_id)
