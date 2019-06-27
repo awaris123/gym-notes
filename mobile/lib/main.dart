@@ -15,12 +15,14 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Gym Notes"),
         ),
-          body: Center(child: Register(), 
+          body: Center(child: StartUp(), 
         )
       ),
     );
   }
 }
+
+
 
 class StartUp extends StatelessWidget{
 
@@ -31,21 +33,48 @@ class StartUp extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 30),
-          FlatButton(
+          OutlineButton(
+            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             color: Colors.white,
             onPressed: () {
-              
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Registration()),
+                );
             },
-            child: const Text('Signup', style: TextStyle(fontSize: 20)),
+            child: const Text('Sign Up', style: TextStyle(fontSize: 20)),
           ),
           const SizedBox(height:30),
-          FlatButton(
+          OutlineButton(
+            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+
+            },
             child: const Text('Login', style: TextStyle(fontSize:20))
             ),
         ],
       )
+    );
+  }
+}
+
+class Registration extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Gym Notes',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Gym Notes"),
+        ),
+          body: Center(child: Register(), 
+        )
+      ),
     );
   }
 }
@@ -71,6 +100,7 @@ class RegistrationFormState extends State<Register> {
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(labelText: 'First Name: '),
@@ -132,16 +162,18 @@ class RegistrationFormState extends State<Register> {
           ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: RaisedButton(
-              onPressed: () {
+              child: OutlineButton(
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                color: Colors.white,
+                onPressed: () {
                 // Validate returns true if the form is valid, or false
                 // otherwise.
-                if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState.validate()) {
                   // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
+                    Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
-              },
+                  }
+                },
               child: Text('Submit'),
               )
             )
