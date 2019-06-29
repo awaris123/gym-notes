@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gym_notes/login.dart';
+import 'register.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,8 +23,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
 
 class StartUp extends StatelessWidget{
 
@@ -49,137 +49,15 @@ class StartUp extends StatelessWidget{
             shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             color: Colors.white,
             onPressed: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Entrance()),
+                );
             },
             child: const Text('Login', style: TextStyle(fontSize:20))
             ),
         ],
       )
     );
-  }
-}
-
-class Registration extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Gym Notes',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Gym Notes"),
-        ),
-          body: Center(child: Register(), 
-        )
-      ),
-    );
-  }
-}
-
-
-// Define a custom Form widget.
-class Register extends StatefulWidget {
-  @override
-  RegistrationFormState createState() {
-    return RegistrationFormState();
-  }
-}
-
-class RegistrationFormState extends State<Register> {
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        
-        children: <Widget>[
-          TextFormField(
-            decoration: InputDecoration(labelText: 'First Name: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Last Name: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Username: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Email: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-          
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Password: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-
-          TextFormField(
-            decoration: InputDecoration(labelText: 'Confirm Password: '),
-            validator: (value) {
-            if (value.isEmpty) {
-              return 'Enter some text';
-            }
-            return null;
-            },
-          ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: OutlineButton(
-                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                color: Colors.white,
-                onPressed: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                  if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                    Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                  }
-                },
-              child: Text('Submit'),
-              )
-            )
-        ],
-      )
-    );
-    
   }
 }
