@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, request, abort, make_response
+from flask_httpauth import HTTPBasicAuth
 from models.user import User
 import mysql.connector
 
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
 
 mydb = mysql.connector.connect(host="gym-notes.cj6ntdmjz9qf.us-east-1.rds.amazonaws.com",
                                user="gym_log_db_1234" ,
@@ -12,18 +15,11 @@ mydb = mysql.connector.connect(host="gym-notes.cj6ntdmjz9qf.us-east-1.rds.amazon
 
 cursor = mydb.cursor(buffered=True)
 
-cursor.execute("SHOW databases")
 
-# dummy endpoint for sample output
-@app.route('/notes/api/v1.0/',methods=['GET'])
-def index():
-    return jsonify(exercise = "Bench Press",
-                   weight = 225,
-                   date = "Dec-23-1999")
-
-
-# allows user to create accounts
-@app.route('/notes/api/v1.0/sign-up', methods=['POST'])
+'''
+Create user account
+'''
+@app.route('/notes/api/v1.0/users', methods=['POST'])
 def signup():
 
     fname = request.json['firstname']
@@ -65,7 +61,18 @@ def signup():
 
         return member.json()
 
-# authenticates users and logs them in
+
+
+@auth.verify_password
+def verify_password(userOrEmail="", password=""):
+    if '@' in userOrEmail:
+        print('email')
+    else:
+        print('username')
+
+
+
+'''Login and user authentication'''
 @app.route('/notes/api/v1.0/login', methods = ['GET'])
 def login():
     pass
