@@ -12,6 +12,10 @@ class User:
         self.user_id = id
 
 
+    @staticmethod
+    def check_pw(pw, hash):
+        return pwd.encrypt(pw) == hash
+
     def __eq__(self, other):
         if self.username == other.username or self.email == other.email:
             return True

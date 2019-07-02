@@ -65,17 +65,27 @@ def signup():
 
 @auth.verify_password
 def verify_password(userOrEmail="", password=""):
+    print(userOrEmail, password)
     if '@' in userOrEmail:
-        print('email')
+        cursor.execute("SELECT * FROM User WHERE email = %s", userOrEmail)
+        result = cursor.fetchone()
+
     else:
-        print('username')
+        cursor.execute("SELECT * FROM User WHERE username = %s", userOrEmail)
+        result = cursor.fetchone()
+
+    if result:
+        return User.check_pw(password, result[2])
+    return False
 
 
 
 '''Login and user authentication'''
+
 @app.route('/notes/api/v1.0/login', methods = ['GET'])
 def login():
-    pass
+    print(auth.username())
+    return auth.username()
 
 
 @app.errorhandler(404)
