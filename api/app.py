@@ -1,99 +1,62 @@
 from flask import Flask, jsonify, request, abort, make_response
-from flask_httpauth import HTTPBasicAuth
+import pyrebase
+
 from models.user import User
-import mysql.connector
 
 
 app = Flask(__name__)
-auth = HTTPBasicAuth()
+
+config = {
+
+    "apiKey": "AIzaSyCX2lMCCTI5Nk8GwuL1MTU-ujSFMH7tSEM",
+    "authDomain": "gym-notes-f8bbe.firebaseapp.com",
+    "databaseURL": "https://gym-notes-f8bbe.firebaseio.com",
+    "projectId": "gym-notes-f8bbe",
+    "storageBucket": "",
+    "messagingSenderId": "926581369021",
+    "appId": "1:926581369021:web:9dfafa08087d8612"
+}
+
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
 
 
-mydb = mysql.connector.connect(host="gym-notes.cj6ntdmjz9qf.us-east-1.rds.amazonaws.com",
-                               user="gym_log_db_1234" ,
-                               passwd="V7qEz8kaqSs4zBN",
-                               database="gym_log_db_1234")
+@app.route('/notes/api/v1.0/', methods=['GET'])
+def dummy():
+    return "Hello"
 
-cursor = mydb.cursor(buffered=True)
+'''Create user account'''
 
-
-'''
-Create user account
-'''
 @app.route('/notes/api/v1.0/users', methods=['POST'])
 def signup():
 
-    fname = request.json['firstname']
-    lname = request.json['lastname']
-    user = request.json['username']
+
     email = request.json['email']
     password = request.json['password']
     confirm = request.json['confirm-pw']
-    member = User(user,email,password, fname, lname)
 
-    if not fname or not lname or not user or not email or not password or not confirm:
-        abort(400) # missing args
+    if email and password and confirm:
+        if password == confirm:
+            user = auth.create_user_with_email_and_password(email, password)
+            return jsonify({"Status":"Account Created",
+                            "UserID": auth.get_account_info(user["idToken"])})
 
-    if password != confirm:
-        abort(400) # password does not match confirm
-
-    cursor.execute("SELECT username, email FROM User")
-    results = cursor.fetchall()
-
-    issue = ""
-    for res in results:
-        print(res)
-        if res[0] == member.username:
-            issue += "That username already in use\n"
-        if res[1] == member.email:
-            issue += "That email is already associated with another account\n"
-
-    if issue:
-        return issue
-    else:
-        ADD_USER = ("INSERT INTO User "
-                   "(username, email, hashed_pw, firstname, lastname, user_id) "
-                   "VALUES (%s, %s, %s, %s, %s, %s)")
-
-
-        cursor.execute(ADD_USER,member.info())
-        mydb.commit()
-
-
-        return member.json()
-
-
-
-@auth.verify_password
-def verify_password(userOrEmail="", password=""):
-    print(userOrEmail, password)
-    if '@' in userOrEmail:
-        cursor.execute("SELECT * FROM User WHERE email = %s", userOrEmail)
-        result = cursor.fetchone()
-
-    else:
-        cursor.execute("SELECT * FROM User WHERE username = %s", userOrEmail)
-        result = cursor.fetchone()
-
-    if result:
-        return User.check_pw(password, result[2])
-    return False
+    return jsonify({"Status":"No argumemnts"})
 
 
 
 '''Login and user authentication'''
 
-@app.route('/notes/api/v1.0/login', methods = ['GET'])
+@app.route('/notes/api/v1.0/users/auth', methods = ['POST'])
 def login():
-    print(auth.username())
-    return auth.username()
+    email = request.json['email']
+    password = request.json['password']
+    if email and password :
+        user = auth.sign_in_with_email_and_password(email, password)
+        return jsonify({"Status":" Logged In",
+                        "User": auth.get_account_info(user["idToken"])})
 
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Resource Not Found'}), 404)
 
-@app.errorhandler(400)
-def not_found(error):
-    return make_response(jsonify({'error': 'Bad Request'}), 400)
 if __name__ == '__main__':
     app.run(debug=True)

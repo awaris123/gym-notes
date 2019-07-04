@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Registration extends StatelessWidget {
   
-  /* Root Widget
+  /* 
+  Root Widget
   */
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,13 @@ class RegistrationFormState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
   final double fieldSpace = 11;
-  String pass;
+
+  String fname;
+  String lname;
+  String username;
+  String email;
+  String password;
+  
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -69,6 +76,7 @@ class RegistrationFormState extends State<Register> {
                 if (value.length > 45){
                   return 'Please enter a name less than 45 characters';
                 }
+                fname = value;
                 return null;
                 },
               )
@@ -86,6 +94,7 @@ class RegistrationFormState extends State<Register> {
                   if (value.length > 45){
                     return 'Please enter a name less than 45 characters';
                   }
+                  lname = value;
                   return null;
                 },
               )
@@ -102,6 +111,10 @@ class RegistrationFormState extends State<Register> {
                   if (value.length > 20){
                     return "Please enter a username less than 20 characters";
                   }
+                  if (value.contains('@')){
+                    return "Username cannot contain @";
+                  }
+                  username = value;
                   return null;
                   },
               )
@@ -118,6 +131,7 @@ class RegistrationFormState extends State<Register> {
                   if (!value.contains('@')){
                     return "Enter a valid email address";
                   }
+                  email = value;
                   return null;
                   },
               )
@@ -128,10 +142,10 @@ class RegistrationFormState extends State<Register> {
               child:TextFormField(
                 decoration: InputDecoration(labelText: 'Password: '),
                 validator: (value) {
-                  pass = value;
                   if (value.isEmpty) {
                     return 'Enter some text';
                   }
+                  password = value;
                   return null;
                   },
               )
@@ -145,7 +159,7 @@ class RegistrationFormState extends State<Register> {
                   if (value.isEmpty) {
                     return 'Enter some text';
                   }
-                  if (value != pass){
+                  if (value != password){
                     return "Your passwords do not match";
                   }
                   return null;
@@ -159,10 +173,9 @@ class RegistrationFormState extends State<Register> {
                 shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 color: Colors.white,
                 onPressed: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
+
                   if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
+                    
                     Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Account Created!')));
                   }
