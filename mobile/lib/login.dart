@@ -50,7 +50,7 @@ class LoginFormState extends State<Login> {
           Padding(
             padding:EdgeInsets.fromLTRB(0,0,0,fieldSpace),
             child:TextFormField(
-              decoration: InputDecoration(labelText: 'Username or Email: '),
+              decoration: InputDecoration(labelText: 'Email: '),
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Enter some text';

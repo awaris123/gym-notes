@@ -43,11 +43,10 @@ class RegistrationFormState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final double fieldSpace = 11;
 
-  String fname;
-  String lname;
-  String username;
+
   String email;
   String password;
+  String confirm;
   
   @override
   Widget build(BuildContext context) {
@@ -64,62 +63,6 @@ class RegistrationFormState extends State<Register> {
             crossAxisAlignment: CrossAxisAlignment.start,
         
             children: <Widget>[
-            Padding(
-              padding:EdgeInsets.fromLTRB(0,0,0,fieldSpace),
-              child:TextFormField(
-              decoration: InputDecoration(labelText: 'First Name: '),
-              validator: (value) {
-                
-                if (value.isEmpty) {
-                  return 'Enter some text';
-                }
-                if (value.length > 45){
-                  return 'Please enter a name less than 45 characters';
-                }
-                fname = value;
-                return null;
-                },
-              )
-            ),
-
-
-            Padding(
-              padding:EdgeInsets.fromLTRB(0,0,0,fieldSpace),
-              child:TextFormField(
-                decoration: InputDecoration(labelText: 'Last Name: '),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter some text';
-                  }
-                  if (value.length > 45){
-                    return 'Please enter a name less than 45 characters';
-                  }
-                  lname = value;
-                  return null;
-                },
-              )
-            ),
-
-            Padding(
-              padding:EdgeInsets.fromLTRB(0,0,0,fieldSpace),
-              child:TextFormField(
-                decoration: InputDecoration(labelText: 'Username: '),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter some text';
-                  }
-                  if (value.length > 20){
-                    return "Please enter a username less than 20 characters";
-                  }
-                  if (value.contains('@')){
-                    return "Username cannot contain @";
-                  }
-                  username = value;
-                  return null;
-                  },
-              )
-            ),
-          
             Padding(
               padding:EdgeInsets.fromLTRB(0,0,0,fieldSpace),
               child:TextFormField(
@@ -159,7 +102,8 @@ class RegistrationFormState extends State<Register> {
                   if (value.isEmpty) {
                     return 'Enter some text';
                   }
-                  if (value != password){
+                  confirm = value;
+                  if (confirm != password){
                     return "Your passwords do not match";
                   }
                   return null;
