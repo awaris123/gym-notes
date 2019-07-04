@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, abort, make_response
 import pyrebase
 
-from models.user import User
 
 
 app = Flask(__name__)
@@ -21,15 +20,10 @@ firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
 
-@app.route('/notes/api/v1.0/', methods=['GET'])
-def dummy():
-    return "Hello"
-
 '''Create user account'''
 
 @app.route('/notes/api/v1.0/users', methods=['POST'])
 def signup():
-
 
     email = request.json['email']
     password = request.json['password']
