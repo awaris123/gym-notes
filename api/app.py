@@ -1,22 +1,23 @@
 from flask import Flask, jsonify, request, abort, make_response
+import config
 import pyrebase
 
 
 
 app = Flask(__name__)
 
-config = {
+keys = {
 
-    "apiKey": "AIzaSyCX2lMCCTI5Nk8GwuL1MTU-ujSFMH7tSEM",
-    "authDomain": "gym-notes-f8bbe.firebaseapp.com",
-    "databaseURL": "https://gym-notes-f8bbe.firebaseio.com",
-    "projectId": "gym-notes-f8bbe",
-    "storageBucket": "",
-    "messagingSenderId": "926581369021",
-    "appId": "1:926581369021:web:9dfafa08087d8612"
+    "apiKey": config.apiKey,
+    "authDomain": config.authDomain,
+    "databaseURL": config.databaseURL,
+    "projectId": config.projectId,
+    "storageBucket": config.storageBucket,
+    "messagingSenderId": config.messagingSenderId,
+    "appId": config.appId
 }
 
-firebase = pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(keys)
 auth = firebase.auth()
 
 
