@@ -1,25 +1,11 @@
 from flask import Flask, jsonify, request, abort, make_response
-import config
-import pyrebase
-
-
+import firebase_admin
+from firebase_admin import credentials, auth
 
 app = Flask(__name__)
 
-keys = {
-
-    "apiKey": config.apiKey,
-    "authDomain": config.authDomain,
-    "databaseURL": config.databaseURL,
-    "projectId": config.projectId,
-    "storageBucket": config.storageBucket,
-    "messagingSenderId": config.messagingSenderId,
-    "appId": config.appId
-}
-
-firebase = pyrebase.initialize_app(keys)
-auth = firebase.auth()
-
+cred = credentials.Certificate("gym-notes-f8bbe-firebase-adminsdk-rmrwf-545e8543f5.json")
+firebase_admin.initialize_app(cred)
 
 '''Create user account'''
 
@@ -32,24 +18,34 @@ def signup():
 
     if email and password and confirm:
         if password == confirm:
-            user = auth.create_user_with_email_and_password(email, password)
-            return jsonify({"Status":"Account Created",
-                            "UserID": auth.get_account_info(user["idToken"])})
+            user = auth.create_user(email=email, password=password)
+
+            print('Sucessfully created new user: {0}'.format(user.uid))
+            custom_token = auth.create_custom_token(user.uid)
+            return jsonify(custom_token)
 
     return jsonify({"Status":"No argumemnts"})
 
 
 
-'''Login and user authentication'''
+'''User authentication'''
 
-@app.route('/notes/api/v1.0/users/auth', methods = ['POST'])
+@app.route('/notes/api/v1.0/users/', methods = ['GET'])
 def login():
     email = request.json['email']
     password = request.json['password']
-    if email and password :
-        user = auth.sign_in_with_email_and_password(email, password)
-        return jsonify({"Status":" Logged In",
-                        "User": auth.get_account_info(user["idToken"])})
+    user = auth.get_user_by_email(email)
+    if user:
+        if user.password_hash == password:
+            pass
+    uid = 'some-uid'
+
+    custom_token = auth.create_custom_token(uid)
+
+    print(email, password)
+    return jsonify({"email":email, "password":password})
+
+
 
 
 
