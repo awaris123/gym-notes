@@ -27,23 +27,16 @@ def signup():
     return jsonify({"Status":"No argumemnts"})
 
 
+@app.route('/notes/api/v1.0/users', methods = ['GET'])
+def getEmail():
 
-'''User authentication'''
 
-@app.route('/notes/api/v1.0/users/', methods = ['GET'])
-def login():
-    email = request.json['email']
-    password = request.json['password']
-    user = auth.get_user_by_email(email)
-    if user:
-        if user.password_hash == password:
-            pass
-    uid = 'some-uid'
-
-    custom_token = auth.create_custom_token(uid)
-
-    print(email, password)
-    return jsonify({"email":email, "password":password})
+    token = request.json['token']
+    decoded_tok = auth.verify_id_token(token)
+    uid = decoded_tok['uid']
+    user = auth.get_user(uid)
+    response = jsonify({"Email":user.email})
+    return response
 
 
 
