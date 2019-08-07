@@ -1,6 +1,6 @@
 runtime: python37
 
-
+entrypoint: gunicorn -b :$PORT demosite.wsgi:main
 
 runtime_config:
-  python_version: 3
+  python_version: 3.7

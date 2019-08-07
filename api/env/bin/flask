@@ -1,4 +1,4 @@
-#!/home/aakef/Documents/Python_WS/Default/GymNotes/api/env/bin/python3
+#!/home/aakef/Documents/projects/gym-notes/api/env/bin/python3.7
 
 # -*- coding: utf-8 -*-
 import re
