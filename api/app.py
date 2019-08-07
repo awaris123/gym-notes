@@ -12,16 +12,21 @@ firebase_admin.initialize_app(cred)
 @app.route('/notes/api/v1.0/users', methods=['POST'])
 def signup():
 
+    print("signup endpoint called")
+
     email = request.json['email']
     password = request.json['password']
     confirm = request.json['confirm-pw']
+    print("recived request body")
 
     if email and password and confirm:
+        print("valid request body")
         if password == confirm:
             user = auth.create_user(email=email, password=password)
-
             print('Sucessfully created new user: {0}'.format(user.uid))
+
             custom_token = auth.create_custom_token(user.uid)
+            print("returned auth token")
             return jsonify(custom_token)
 
     return jsonify({"Status":"No argumemnts"})
