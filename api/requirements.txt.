@@ -42,6 +42,7 @@ google-resumable-media==0.3.2
 googleapis-common-protos==1.6.0
 greenlet==0.4.15
 grpcio==1.22.0
+gunicorn==19.9.0
 html5lib==0.999999999
 httplib2==0.13.0
 idna==2.7
