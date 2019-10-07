@@ -1,44 +1,35 @@
-from flask import Flask, jsonify, request, abort, make_response
-import firebase_admin
-from firebase_admin import credentials, auth
-
+from flask import Flask, jsonify, request
+from Models.User import User
 app = Flask(__name__)
 
 
-cred = credentials.Certificate("gym-notes-f8bbe-firebase-adminsdk-rmrwf-545e8543f5.json")
-firebase_admin.initialize_app(cred)
 
 '''Create user account'''
 
-@app.route('/notes/api/v1.0/users', methods=['POST'])
-def create_account():
-
-    response = "OK"
-
+@app.route('/notes/api/users', methods=['POST'])
+def add_user():
     try:
-        email = request.json['email']
-        password = request.json['password']
-        confirm = request.json['confirm-pw']
-
-        if email and password and confirm and (password == confirm):
-            user = auth.create_user(email=email, password=password)
-
-            custom_token = auth.create_custom_token(user.uid)
+        new_user = User(request.json["email"], request.json["password"])
+        response = new_user.create()
 
     except:
-        response = "BAD_REQUEST"
+        response = {"message" : "BAD_REQUEST"}
 
-    return response
-
-
+    return jsonify(response)
 
 
-@app.route('/notes/api/v1.0/users', methods = ['GET'])
-def getEmail():
+'''Delete a user account'''
 
-    response = "OK"
-    return response
+@app.route('/notes/api/users', methods=['DELETE'])
+def del_user():
+    try:
+        new_user = User(request.json["email"], request.json["password"])
+        response = new_user.delete()
 
+    except:
+            response = {"message" : "BAD_REQUEST"}
+
+    return jsonify(response)
 
 
 
