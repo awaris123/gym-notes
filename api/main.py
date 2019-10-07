@@ -23,11 +23,11 @@ def add_user():
 @app.route('/notes/api/users', methods=['DELETE'])
 def del_user():
     try:
-        new_user = User(request.json["email"], request.json["password"])
+        new_user = User(id_token = request.json['id_token'])
         response = new_user.delete()
 
     except:
-            response = {"message" : "BAD_REQUEST"}
+        response = {"message" : "BAD_REQUEST"}
 
     return jsonify(response)
 
