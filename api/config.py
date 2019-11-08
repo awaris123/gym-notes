@@ -1,5 +1,11 @@
 import firebase_admin
 from firebase_admin import credentials, auth
+import json
 
-cred = credentials.Certificate("gym-notes-f8bbe-firebase-adminsdk-rmrwf-545e8543f5.json")
+file = open('keys.json', 'r')
+keys = json.load(file)
+
+
+
+cred = credentials.Certificate(keys['firebase-admin-key'])
 firebase_admin.initialize_app(cred)
